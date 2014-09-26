@@ -29,3 +29,4 @@ documentation
 *.cfgc
 cfg/__init__.py
 
+doxygen_warn.log

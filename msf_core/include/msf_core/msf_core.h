@@ -204,6 +204,8 @@ class MSF_Core {
   CheckFuzzyTracking<EKFState_T, nonDriftingStateType> fuzzyTracker_;
   /// A class which provides methods for customization of several calculations.
   const MSF_SensorManager<EKFState_T>& usercalc_;
+  /// maximum buffer length in seconds
+  double maxBufferLength;
 
   /**
    * \brief Applies the correction.

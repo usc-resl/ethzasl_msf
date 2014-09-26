@@ -131,6 +131,7 @@ class MSF_SensorManager : public StateVisitor<EKFState_T> {
   virtual double GetParamNoiseGyr() const = 0;
   virtual double GetParamNoiseGyrbias() const = 0;
   virtual double GetParamFuzzyTrackingThreshold() const = 0;
+  virtual double GetParamMaxBufferLength() const = 0;
 
   /**
    * This functions get called by the core to publish data to external

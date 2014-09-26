@@ -315,7 +315,7 @@ void MSF_Core<EKFState_T>::HandlePendingMeasurements() {
 
 template<typename EKFState_T>
 void MSF_Core<EKFState_T>::CleanUpBuffers() {
-  double timeold = 60;  // 1 min.
+  double timeold = usercalc_.GetParamMaxBufferLength();
   stateBuffer_.ClearOlderThan(timeold);
   MeasurementBuffer_.ClearOlderThan(timeold);
 }
@@ -585,7 +585,8 @@ void MSF_Core<EKFState_T>::Init(
       "\tnoise_acc:\t" << usercalc_.GetParamNoiseAcc() << std::endl <<
       "\tnoise_accbias:\t" << usercalc_.GetParamNoiseAccbias() << std::endl <<
       "\tnoise_gyr:\t" << usercalc_.GetParamNoiseGyr() << std::endl <<
-      "\tnoise_gyrbias:\t" << usercalc_.GetParamNoiseGyrbias() << std::endl);
+      "\tnoise_gyrbias:\t" << usercalc_.GetParamNoiseGyrbias() << std::endl <<
+      "\tmax_buffer_length:\t" << usercalc_.GetParamMaxBufferLength() << std::endl);
 
 
   MSF_INFO_STREAM("Core init with state: " << std::endl << state->Print());

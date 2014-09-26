@@ -165,6 +165,9 @@ struct MSF_SensorManagerROS : public msf_core::MSF_SensorManager<EKFState_T> {
   virtual double GetParamFuzzyTrackingThreshold() const {
     return 0.1;
   }
+  virtual double GetParamMaxBufferLength() const {
+    return config_.core_max_buffer_length;
+  }
   virtual void PublishStateInitial(const shared_ptr<EKFState_T>& state) const {
     /**
      * \brief Initialize the HLP based propagation.

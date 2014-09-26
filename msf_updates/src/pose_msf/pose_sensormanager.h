@@ -223,6 +223,17 @@ class PoseSensorManager : public msf_core::MSF_SensorManagerROS<
     meas->SetStateInitValue < StateDefinition_T::q_ic > (q_ic);
     meas->SetStateInitValue < StateDefinition_T::p_ic > (p_ic);
 
+    // get initial covariance from parameter server
+    std::vector<double> initStdDev;
+    if (!pnh.getParam("pose_sensor/init/std_dev", initStdDev)) {
+      ROS_WARN("Initial standard deviation not set in (static) parameters");
+    } else if (initStdDev.size() != EKFState_T::nErrorStatesAtCompileTime) {
+      ROS_WARN("Size of initial standard deviation parameter init/std_dev (%d) does not match size of covariance (%d) -- not using parameter", (int)initStdDev.size(), EKFState_T::nErrorStatesAtCompileTime);
+    } else {
+      Eigen::Array<double, EKFState_T::nErrorStatesAtCompileTime, 1> initStd = Eigen::Map<Eigen::Array<double, EKFState_T::nErrorStatesAtCompileTime, 1> >(initStdDev.data());
+      meas->GetStateCovariance() = Eigen::Matrix<double, EKFState_T::nErrorStatesAtCompileTime, 1>(initStd.square()).asDiagonal();
+    }
+
     SetStateCovariance(meas->GetStateCovariance());  // Call my set P function.
     meas->Getw_m() = w_m;
     meas->Geta_m() = a_m;

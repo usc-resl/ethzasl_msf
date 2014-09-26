@@ -61,6 +61,7 @@ struct MSF_SensorManagerROS : public msf_core::MSF_SensorManager<EKFState_T> {
 
   ros::Publisher pubState_;  ///< Publishes all states of the filter.
   ros::Publisher pubPose_;  ///< Publishes 6DoF pose output.
+  ros::Publisher pubPoseWithoutCov_;  ///< Publishes 6DoF pose output.
   ros::Publisher pubPoseAfterUpdate_;  ///< Publishes 6DoF pose output after the update has been applied.
   ros::Publisher pubPoseCrtl_;  ///< Publishes 6DoF pose including velocity output.
   ros::Publisher pubCorrect_;  ///< Publishes corrections for external state propagation.
@@ -90,6 +91,8 @@ struct MSF_SensorManagerROS : public msf_core::MSF_SensorManager<EKFState_T> {
     pubCorrect_ = nh.advertise < sensor_fusion_comm::ExtEkf > ("correction", 1);
     pubPose_ = nh.advertise < geometry_msgs::PoseWithCovarianceStamped
         > ("pose", 100);
+    pubPoseWithoutCov_ = nh.advertise < geometry_msgs::PoseStamped
+        > ("pose_without_cov", 100);
     pubPoseAfterUpdate_ = nh.advertise
         < geometry_msgs::PoseWithCovarianceStamped > ("pose_after_update", 100);
     pubPoseCrtl_ = nh.advertise < sensor_fusion_comm::ExtState
@@ -197,7 +200,7 @@ struct MSF_SensorManagerROS : public msf_core::MSF_SensorManager<EKFState_T> {
   virtual void PublishStateAfterPropagation(
       const shared_ptr<EKFState_T>& state) const {
 
-    if (pubPoseCrtl_.getNumSubscribers() || pubPose_.getNumSubscribers()) {
+    if (pubPoseCrtl_.getNumSubscribers() || pubPose_.getNumSubscribers() || pubPoseWithoutCov_.getNumSubscribers()) {
       static int msg_seq = 0;
 
       geometry_msgs::PoseWithCovarianceStamped msgPose;
@@ -206,6 +209,11 @@ struct MSF_SensorManagerROS : public msf_core::MSF_SensorManager<EKFState_T> {
       msgPose.header.frame_id = "/world";
       state->ToPoseMsg(msgPose);
       pubPose_.publish(msgPose);
+
+      geometry_msgs::PoseStamped msgPoseWithoutCov;
+      msgPoseWithoutCov.header = msgPose.header;
+      msgPoseWithoutCov.pose = msgPose.pose.pose;
+      pubPoseWithoutCov_.publish(msgPoseWithoutCov);
 
       sensor_fusion_comm::ExtState msgPoseCtrl;
       msgPoseCtrl.header = msgPose.header;

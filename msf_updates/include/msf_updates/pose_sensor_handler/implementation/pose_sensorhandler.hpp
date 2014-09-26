@@ -42,6 +42,9 @@ PoseSensorHandler<MEASUREMENT_TYPE, MANAGER_TYPE>::PoseSensorHandler(
             true);
   pnh.param("pose_measurement_world_sensor", measurement_world_sensor_, true);
   pnh.param("pose_use_fixed_covariance", use_fixed_covariance_, false);
+  pnh.param("pose_measurement_throttling_use_every", measurement_throttling_every_, 5);
+  if (measurement_throttling_every_ < 1)
+    measurement_throttling_every_ = 1;
 
   MSF_INFO_STREAM_COND(measurement_world_sensor_, "Pose sensor is interpreting "
                        "measurement as sensor w.r.t. world");
@@ -61,6 +64,8 @@ PoseSensorHandler<MEASUREMENT_TYPE, MANAGER_TYPE>::PoseSensorHandler(
                        "measurements as absolute values");
   MSF_INFO_STREAM_COND(!provides_absolute_measurements_, "Pose sensor is "
                        "handling measurements as relative values");
+  MSF_INFO_STREAM_COND(measurement_throttling_every_ == 1, "Pose measurement throttling is off");
+  MSF_INFO_STREAM_COND(measurement_throttling_every_ != 1, "Pose measurement throttling is on. Using every " << measurement_throttling_every_ << "pose message");
 
   ros::NodeHandle nh("msf_updates/" + topic_namespace);
   subPoseWithCovarianceStamped_ =
@@ -190,9 +195,9 @@ void PoseSensorHandler<MEASUREMENT_TYPE, MANAGER_TYPE>::MeasurementCallback(
           << this->topic_namespace_ << "/" << subTransformStamped_.getTopic()
           << " ***");
 
-  if (msg->header.seq % 5 != 0) {  // Slow down vicon.
+  if (msg->header.seq % measurement_throttling_every_ != 0) {  // Slow down vicon.
     MSF_WARN_STREAM_THROTTLE(30, "Measurement throttling is on, dropping every "
-                             "but the 5th message");
+                             "but the " << measurement_throttling_every_ << "th message");
     return;
   }
 

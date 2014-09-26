@@ -48,6 +48,7 @@ class PoseSensorHandler : public msf_core::SensorHandler<
   bool use_fixed_covariance_;  ///< Use fixed covariance set by dynamic reconfigure
   bool provides_absolute_measurements_;  ///<Does this sensor measure relative or
                                          // absolute values
+  int measurement_throttling_every_; ///< Use every n-th pose message
 
   msf_updates::PoseDistorter::Ptr distorter_;
 

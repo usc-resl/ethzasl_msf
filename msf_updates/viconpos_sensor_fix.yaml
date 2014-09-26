@@ -1,5 +1,5 @@
 core:
-  data_playback: true
+  data_playback: false
 
 pose_sensor:
   init:
@@ -11,7 +11,7 @@ pose_sensor:
     p_ic:
       x: 0.0
       y: 0.0
-      z: 0.0
+      z: -0.05
     std_dev: [0.05, 0.05, 0.05, 0.2, 0.2, 0.2, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.1, 0.1, 0.1, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
   pose_absolute_measurements: true
   pose_use_fixed_covariance: true

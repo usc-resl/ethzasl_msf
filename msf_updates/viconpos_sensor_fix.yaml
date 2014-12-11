@@ -1,5 +1,5 @@
 core:
-  data_playback: false
+  data_playback: true
 
 pose_sensor:
   init:
@@ -12,7 +12,9 @@ pose_sensor:
       x: 0.0
       y: 0.0
       z: -0.05
-    std_dev: [0.05, 0.05, 0.05, 0.2, 0.2, 0.2, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.1, 0.1, 0.1, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+#    std_dev: [0.05, 0.05, 0.05, 0.2, 0.2, 0.2, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.1, 0.1, 0.1, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+    std_dev: [0.05, 0.05, 0.05, 0.2, 0.2, 0.2, 0.04, 0.04, 0.04, 0.02, 0.02, 0.02, 0.2, 0.2, 0.2, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001, 0.001]
+ 
   pose_absolute_measurements: true
   pose_use_fixed_covariance: true
   pose_measurement_world_sensor: true  # selects if sensor measures its position w.r.t. world (true, e.g. Vicon) or the position of the world coordinate system w.r.t. the sensor (false, e.g. ethzasl_ptam)

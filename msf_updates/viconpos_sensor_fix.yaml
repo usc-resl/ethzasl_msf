@@ -1,5 +1,5 @@
 core:
-  data_playback: true
+  data_playback: false
 
 pose_sensor:
   init:
